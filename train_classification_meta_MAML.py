@@ -51,59 +51,32 @@ def inplace_relu(m):
     if classname.find('ReLU') != -1:
         m.inplace=True
 
-
-def test(model, loader, num_class=40):
-    mean_correct = []
-    class_acc = np.zeros((num_class, 3))
-    classifier = model.eval()
-
-    for j, (points, target) in tqdm(enumerate(loader), total=len(loader)):
-
-        if not args.use_cpu:
-            points, target = points.cuda(), target.cuda()
-
-        points = points.transpose(2, 1)
-        pred, _ = classifier(points)
-        pred_choice = pred.data.max(1)[1]
-
-        for cat in np.unique(target.cpu()):
-            classacc = pred_choice[target == cat].eq(target[target == cat].long().data).cpu().sum()
-            class_acc[cat, 0] += classacc.item() / float(points[target == cat].size()[0])
-            class_acc[cat, 1] += 1
-
-        correct = pred_choice.eq(target.long().data).cpu().sum()
-        mean_correct.append(correct.item() / float(points.size()[0]))
-
-    class_acc[:, 2] = class_acc[:, 0] / class_acc[:, 1]
-    class_acc = np.mean(class_acc[:, 2])
-    instance_acc = np.mean(mean_correct)
-
-    return instance_acc, class_acc
+def cloned_state_dict(model: nn.Module):
+    cloned_state_dict = {
+        key: val.clone()
+        for key, val in model.state_dict().items()
+    }
+    return cloned_state_dict
 
 
-def maml_single_task_training(model: nn.Module, loss_fn,
-                              points: torch.Tensor, labels: torch.Tensor, device='cuda'):
-    from models.pointnet2_cls_msg import get_model as pointnet2_model
-    criterion = loss_fn
-    inner_model = pointnet2_model(10, False).to(device)
-    inner_model.load_state_dict(model.state_dict())
-    inner_model = inner_model.train()
-    # optimizer = torch.optim.Adam(
-    #             inner_model.parameters(),
-    #             lr=0.01,
-    #             betas=(0.9, 0.999),
-    #             eps=1e-08,
-    #             weight_decay=1e-4
-    #         )
-    
-    # 這裡 scheduler 可能作用不大
-    # scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.7)
+from models.pointnet2_cls_msg import get_model as pointnet2_model
+from collections import OrderedDict
+def maml_single_task_training(model: pointnet2_model, loss_fn,
+                              points: torch.Tensor, labels: torch.Tensor,
+                              task_lr, device='cuda'):
+    # inner loop is set to 1 so you will not see this code
+    model.train()
+    pred, trans_feat = model(points)    
+    loss = loss_fn(pred, labels.long(), trans_feat)
+    model.zero_grad(False)
+    grads = torch.autograd.grad(loss, model.parameters(), create_graph=True)
+    adapted_state_dict = cloned_state_dict(model)
 
-    pred, trans_feat = inner_model(points)
-    loss = criterion(pred, labels.long(), trans_feat)
-    # loss.backward()
-    # optimizer.step()
-    return inner_model, loss
+    for (key, val), grad in zip(model.named_parameters(), grads):
+        pp = val - task_lr * grad
+        adapted_state_dict[key] = pp
+
+    return adapted_state_dict, loss
 
 
 def maml_points_do_staff(points):
@@ -116,46 +89,11 @@ def maml_points_do_staff(points):
     points = points.cuda()
     return points
 
-def maml_task_training(model: nn.Module, loss_fn, 
-                             task_data_loader: list[DataLoader],
-                             device='cuda'):
-    loop_count = 1000
-    task_iter = [iter(x) for x in task_data_loader]
-    
-    inner_model = model
-    for _ in range(loop_count):
-        task_loss = []
-        task_model = []
-        inner_model = model
-        for (i, ti) in enumerate(task_iter):
-            try:
-                points, labels = next(ti)
-            except StopIteration:
-                task_iter[i] = iter(task_data_loader[i])
-                points, labels = next(task_iter[i])
-
-            points = maml_points_do_staff(points)
-            labels = labels.cuda()
-            tmp_model, tmp_loss = maml_single_task_training(inner_model, loss_fn, points, labels)
-            task_loss.append(tmp_loss)
-            task_model.append(tmp_model)
-        pass
-
-        # Update Outer loop
-        meta_batch_loss = torch.stack(task_loss).mean()
-        meta_batch_loss.backward()
-        inner_model = task_model[-1]
-
-    return inner_model, meta_batch_loss
-
 def maml_main(args):
     """
-    附註：那個 meta lerning 的作業有點誤導人，沒有包含 MAML 中的 fine tuning 到指定任務的步驟
-    並不太需要一定要按照 MAML 中分資料，或是 support set and query test
-    只用 training set 中的 training set 即可訓練
-
     參考影片內容：
     https://youtu.be/xoastiYx9JU?si=XPB5xYk82t5p4hb0
+    以下內容可能有誤
     將 ModelNet40 的 training set 分成 (10, 10, 10, 10) 組類別，命名為 Task1, Task2, Task3, Task4
     MAML 訓練順序：
     Task 1 Data 0 --> 取得 T1 的 g1 (gradient or loss)
@@ -177,171 +115,57 @@ def maml_main(args):
     datasets = split_four_categoris(data_root, args)
     # dataset_finetune = datasets[4]
     datasets = datasets[0:3]
-    task_data_loader = [DataLoader(x, batch_size=args.batch_size, shuffle=True, num_workers=10, drop_last=True) for x in datasets]
+    task_data_loader = [DataLoader(x, batch_size=4, shuffle=True, num_workers=10, drop_last=True) for x in datasets]
     
     from models.pointnet2_cls_msg import get_model as pointnet2_model
     from models.pointnet2_cls_msg import get_loss as pointnet2_loss_fn
-    model = pointnet2_model(10, False)
+    model = pointnet2_model(10, False).to("cuda")
     criterion = pointnet2_loss_fn()
+    meta_lr = 1e-3
+    meta_optimizer = torch.optim.Adam(model.parameters(), lr=meta_lr)
 
     start_epoch = 0
-    for epoch in range(start_epoch, args.epoch):
-        maml_model = model
-        maml_model, maml_loss = maml_task_training(maml_model, criterion, task_data_loader)
-        print(epoch, "Current Loss:", maml_loss.cpu().items())
+    loop_count = 1000 // 10
+    for epoch in range(start_epoch, 100):
+        task_iter = [iter(x) for x in task_data_loader]
+        task_lr = 1e-1
+        for lc in range(loop_count):
+            task_model_dict = []
+            task_model_loss = []
+            task_points = []
+            task_labels = []
+            for (i, ti) in enumerate(task_iter):
+                try:
+                    points, labels = next(ti)
+                except StopIteration:
+                    task_iter[i] = iter(task_data_loader[i])
+                    points, labels = next(task_iter[i])
+                points = maml_points_do_staff(points)
+                labels = labels.cuda()
+                task_points.append(points)
+                task_labels.append(labels)
+
+                task_state_dict, task_loss = maml_single_task_training(model, criterion, points, labels, task_lr)
+                task_model_dict.append(task_state_dict)
+                task_model_loss.append(task_loss)
+
+            # for i in range(len(task_labels)):
+            #     # Just a bunch of weird code
+            #     tmp_model = pointnet2_model(10, model.normal_channel).to("cuda")
+            #     tmp_model.load_state_dict(task_model_dict[i])
+            #     pred, trans_feat = tmp_model(task_points[i])
+            #     loss = criterion(pred, task_labels[i].long(), trans_feat)
+            #     task_model_loss.append(loss)
+                
+            meta_loss = torch.stack(task_model_loss).mean()
+            meta_optimizer.zero_grad()
+            meta_loss.backward()
+            meta_optimizer.step()
+            loss_cpu = meta_loss.item()
+            print(epoch, lc, "Meta Loss:", loss_cpu)
+            pass
     pass
     torch.save(model.state_dict(), "good_model.pth")
-
-
-def main(args):
-    def log_string(str):
-        logger.info(str)
-        print(str)
-
-    '''HYPER PARAMETER'''
-    os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
-
-    '''CREATE DIR'''
-    timestr = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M'))
-    exp_dir = Path('./log/')
-    exp_dir.mkdir(exist_ok=True)
-    exp_dir = exp_dir.joinpath('classification')
-    exp_dir.mkdir(exist_ok=True)
-    if args.log_dir is None:
-        exp_dir = exp_dir.joinpath(timestr)
-    else:
-        exp_dir = exp_dir.joinpath(args.log_dir)
-    exp_dir.mkdir(exist_ok=True)
-    checkpoints_dir = exp_dir.joinpath('checkpoints/')
-    checkpoints_dir.mkdir(exist_ok=True)
-    log_dir = exp_dir.joinpath('logs/')
-    log_dir.mkdir(exist_ok=True)
-
-    '''LOG'''
-    args = parse_args()
-    logger = logging.getLogger("Model")
-    logger.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    file_handler = logging.FileHandler('%s/%s.txt' % (log_dir, args.model))
-    file_handler.setLevel(logging.INFO)
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
-    log_string('PARAMETER ...')
-    log_string(args)
-
-    '''DATA LOADING'''
-    log_string('Load dataset ...')
-    data_path = 'data/modelnet40_normal_resampled/'
-
-    train_dataset = ModelNetDataLoader(root=data_path, args=args, split='train', process_data=args.process_data)
-    test_dataset = ModelNetDataLoader(root=data_path, args=args, split='test', process_data=args.process_data)
-    trainDataLoader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=10, drop_last=True)
-    testDataLoader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=10)
-
-    '''MODEL LOADING'''
-    # python train_classification_meta_MAML.py --model pointnet2_cls_msg --log_dir maml
-    num_class = args.num_category
-    model = importlib.import_module("args.model")
-    shutil.copy('./models/%s.py' % args.model, str(exp_dir))
-    shutil.copy('models/pointnet2_utils.py', str(exp_dir))
-    shutil.copy('./train_classification_meta_MAML.py', str(exp_dir))
-
-    classifier = model.get_model(num_class, normal_channel=args.use_normals)
-    criterion = model.get_loss()
-    classifier.apply(inplace_relu)
-
-    if not args.use_cpu:
-        classifier = classifier.cuda()
-        criterion = criterion.cuda()
-
-    try:
-        checkpoint = torch.load(str(exp_dir) + '/checkpoints/best_model.pth')
-        start_epoch = checkpoint['epoch']
-        classifier.load_state_dict(checkpoint['model_state_dict'])
-        log_string('Use pretrain model')
-    except:
-        log_string('No existing model, starting training from scratch...')
-        start_epoch = 0
-
-    if args.optimizer == 'Adam':
-        optimizer = torch.optim.Adam(
-            classifier.parameters(),
-            lr=args.learning_rate,
-            betas=(0.9, 0.999),
-            eps=1e-08,
-            weight_decay=args.decay_rate
-        )
-    else:
-        optimizer = torch.optim.SGD(classifier.parameters(), lr=0.01, momentum=0.9)
-
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.7)
-    global_epoch = 0
-    global_step = 0
-    best_instance_acc = 0.0
-    best_class_acc = 0.0
-
-    '''TRANING'''
-    logger.info('Start training...')
-    for epoch in range(start_epoch, args.epoch):
-        log_string('Epoch %d (%d/%s):' % (global_epoch + 1, epoch + 1, args.epoch))
-        mean_correct = []
-        classifier = classifier.train()
-
-        scheduler.step()
-        for batch_id, (points, target) in tqdm(enumerate(trainDataLoader, 0), total=len(trainDataLoader), smoothing=0.9):
-            optimizer.zero_grad()
-
-            points = points.data.numpy()
-            points = provider.random_point_dropout(points)
-            points[:, :, 0:3] = provider.random_scale_point_cloud(points[:, :, 0:3])
-            points[:, :, 0:3] = provider.shift_point_cloud(points[:, :, 0:3])
-            points = torch.Tensor(points)
-            points = points.transpose(2, 1)
-
-            if not args.use_cpu:
-                points, target = points.cuda(), target.cuda()
-
-            pred, trans_feat = classifier(points)
-            loss = criterion(pred, target.long(), trans_feat)
-            pred_choice = pred.data.max(1)[1]
-
-            correct = pred_choice.eq(target.long().data).cpu().sum()
-            mean_correct.append(correct.item() / float(points.size()[0]))
-            loss.backward()
-            optimizer.step()
-            global_step += 1
-
-        train_instance_acc = np.mean(mean_correct)
-        log_string('Train Instance Accuracy: %f' % train_instance_acc)
-
-        with torch.no_grad():
-            instance_acc, class_acc = test(classifier.eval(), testDataLoader, num_class=num_class)
-
-            if (instance_acc >= best_instance_acc):
-                best_instance_acc = instance_acc
-                best_epoch = epoch + 1
-
-            if (class_acc >= best_class_acc):
-                best_class_acc = class_acc
-            log_string('Test Instance Accuracy: %f, Class Accuracy: %f' % (instance_acc, class_acc))
-            log_string('Best Instance Accuracy: %f, Class Accuracy: %f' % (best_instance_acc, best_class_acc))
-
-            if (instance_acc >= best_instance_acc):
-                logger.info('Save model...')
-                savepath = str(checkpoints_dir) + '/best_model.pth'
-                log_string('Saving at %s' % savepath)
-                state = {
-                    'epoch': best_epoch,
-                    'instance_acc': instance_acc,
-                    'class_acc': class_acc,
-                    'model_state_dict': classifier.state_dict(),
-                    'optimizer_state_dict': optimizer.state_dict(),
-                }
-                torch.save(state, savepath)
-            global_epoch += 1
-
-    logger.info('End of training...')
-
 
 if __name__ == '__main__':
     args = parse_args()

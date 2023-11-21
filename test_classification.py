@@ -34,8 +34,8 @@ def parse_args():
 
 def test(model, loader, num_class=40, vote_num=1):
     mean_correct = []
-    classifier = model.eval()
-    class_acc = np.zeros((num_class, 3))
+    classifier = model.eval() # 測試時不啟用 BatchNormalization 和 Dropout
+    class_acc = np.zeros((num_class, 3)) # (40,3)
 
     for j, (points, target) in tqdm(enumerate(loader), total=len(loader)):
         if not args.use_cpu:
@@ -58,7 +58,9 @@ def test(model, loader, num_class=40, vote_num=1):
         mean_correct.append(correct.item() / float(points.size()[0]))
 
     class_acc[:, 2] = class_acc[:, 0] / class_acc[:, 1]
+    # 個別類別 accuracy
     class_acc = np.mean(class_acc[:, 2])
+    # 不分類別 accuracy
     instance_acc = np.mean(mean_correct)
     return instance_acc, class_acc
 
@@ -92,7 +94,7 @@ def main(args):
 
     test_dataset = ModelNetDataLoader(root=data_path, args=args, split='test', process_data=False)
     testDataLoader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=10)
-
+    
     '''MODEL LOADING'''
     num_class = args.num_category
     model_name = os.listdir(experiment_dir + '/logs')[0].split('.')[0]

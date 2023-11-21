@@ -113,7 +113,7 @@ def maml_main(args):
     data_root = '/home/g111056119/Documents/7111056119/Pointnet_Pointnet2_pytorch/data/modelnet40_normal_resampled'
     from data_utils.MAML_ModelNetDataLoader40 import split_four_categoris
     datasets = split_four_categoris(data_root, args)
-    # dataset_finetune = datasets[4]
+    # dataset_finetune = datasets[3]
     datasets = datasets[0:3]
     task_data_loader = [DataLoader(x, batch_size=4, shuffle=True, num_workers=10, drop_last=True) for x in datasets]
     

@@ -22,14 +22,23 @@ class get_model(nn.Module):
     def forward(self, x):
         batchsize = x.size()[0]
         n_pts = x.size()[2]
+        # print(x.size()) torch.Size([16, 9, 4096])
         x, trans, trans_feat = self.feat(x)
+        # print(x.size()) torch.Size([16, 1088, 4096])
         x = F.relu(self.bn1(self.conv1(x)))
+        # print(x.size()) torch.Size([16, 512, 4096])
         x = F.relu(self.bn2(self.conv2(x)))
+        # print(x.size()) torch.Size([16, 256, 4096])
         x = F.relu(self.bn3(self.conv3(x)))
-        x = self.conv4(x)
+        # print(x.size()) torch.Size([16, 128, 4096])
+        x = self.conv4(x) 
+        # print(x.size()) torch.Size([16, 13, 4096])
         x = x.transpose(2,1).contiguous()
+        # print(x.size()) torch.Size([16, 4096, 13])
         x = F.log_softmax(x.view(-1,self.k), dim=-1)
+        # print(x.size()) torch.Size([65536, 13])
         x = x.view(batchsize, n_pts, self.k)
+        # print(x.size(), trans_feat.size()) torch.Size([16, 4096, 13]) torch.Size([16, 64, 64])
         return x, trans_feat
 
 class get_loss(torch.nn.Module):

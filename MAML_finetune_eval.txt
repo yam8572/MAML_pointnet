@@ -1,0 +1,3 @@
+Test Instance Accuracy: 0.149915, Class Accuracy: 0.115528
+Test Instance Accuracy: 0.134184, Class Accuracy: 0.093100
+Test Instance Accuracy: 0.144303, Class Accuracy: 0.113871

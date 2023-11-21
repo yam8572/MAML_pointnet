@@ -1,0 +1,704 @@
+PARAMETER ...
+Namespace(model='pointnet2_transformer', batch_size=16, epoch=32, learning_rate=0.001, gpu='0', optimizer='Adam', log_dir=None, decay_rate=0.0001, npoint=1024, step_size=10, lr_decay=0.7, test_area=5)
+start loading training data ...
+-------------> data/stanford_indoor3d/Area_1_WC_1.npy
+-------------> data/stanford_indoor3d/Area_1_conferenceRoom_1.npy
+-------------> data/stanford_indoor3d/Area_1_conferenceRoom_2.npy
+-------------> data/stanford_indoor3d/Area_1_copyRoom_1.npy
+-------------> data/stanford_indoor3d/Area_1_hallway_1.npy
+-------------> data/stanford_indoor3d/Area_1_hallway_2.npy
+-------------> data/stanford_indoor3d/Area_1_hallway_3.npy
+-------------> data/stanford_indoor3d/Area_1_hallway_4.npy
+-------------> data/stanford_indoor3d/Area_1_hallway_5.npy
+-------------> data/stanford_indoor3d/Area_1_hallway_6.npy
+-------------> data/stanford_indoor3d/Area_1_hallway_7.npy
+-------------> data/stanford_indoor3d/Area_1_hallway_8.npy
+-------------> data/stanford_indoor3d/Area_1_office_1.npy
+-------------> data/stanford_indoor3d/Area_1_office_10.npy
+-------------> data/stanford_indoor3d/Area_1_office_11.npy
+-------------> data/stanford_indoor3d/Area_1_office_12.npy
+-------------> data/stanford_indoor3d/Area_1_office_13.npy
+-------------> data/stanford_indoor3d/Area_1_office_14.npy
+-------------> data/stanford_indoor3d/Area_1_office_15.npy
+-------------> data/stanford_indoor3d/Area_1_office_16.npy
+-------------> data/stanford_indoor3d/Area_1_office_17.npy
+-------------> data/stanford_indoor3d/Area_1_office_18.npy
+-------------> data/stanford_indoor3d/Area_1_office_19.npy
+-------------> data/stanford_indoor3d/Area_1_office_2.npy
+-------------> data/stanford_indoor3d/Area_1_office_20.npy
+-------------> data/stanford_indoor3d/Area_1_office_21.npy
+-------------> data/stanford_indoor3d/Area_1_office_22.npy
+-------------> data/stanford_indoor3d/Area_1_office_23.npy
+-------------> data/stanford_indoor3d/Area_1_office_24.npy
+-------------> data/stanford_indoor3d/Area_1_office_25.npy
+-------------> data/stanford_indoor3d/Area_1_office_26.npy
+-------------> data/stanford_indoor3d/Area_1_office_27.npy
+-------------> data/stanford_indoor3d/Area_1_office_28.npy
+-------------> data/stanford_indoor3d/Area_1_office_29.npy
+-------------> data/stanford_indoor3d/Area_1_office_3.npy
+-------------> data/stanford_indoor3d/Area_1_office_30.npy
+-------------> data/stanford_indoor3d/Area_1_office_31.npy
+-------------> data/stanford_indoor3d/Area_1_office_4.npy
+-------------> data/stanford_indoor3d/Area_1_office_5.npy
+-------------> data/stanford_indoor3d/Area_1_office_6.npy
+-------------> data/stanford_indoor3d/Area_1_office_7.npy
+-------------> data/stanford_indoor3d/Area_1_office_8.npy
+-------------> data/stanford_indoor3d/Area_1_office_9.npy
+-------------> data/stanford_indoor3d/Area_1_pantry_1.npy
+-------------> data/stanford_indoor3d/Area_2_WC_1.npy
+-------------> data/stanford_indoor3d/Area_2_WC_2.npy
+-------------> data/stanford_indoor3d/Area_2_auditorium_1.npy
+-------------> data/stanford_indoor3d/Area_2_auditorium_2.npy
+-------------> data/stanford_indoor3d/Area_2_conferenceRoom_1.npy
+-------------> data/stanford_indoor3d/Area_2_hallway_1.npy
+-------------> data/stanford_indoor3d/Area_2_hallway_10.npy
+-------------> data/stanford_indoor3d/Area_2_hallway_11.npy
+-------------> data/stanford_indoor3d/Area_2_hallway_12.npy
+-------------> data/stanford_indoor3d/Area_2_hallway_2.npy
+-------------> data/stanford_indoor3d/Area_2_hallway_3.npy
+-------------> data/stanford_indoor3d/Area_2_hallway_4.npy
+-------------> data/stanford_indoor3d/Area_2_hallway_5.npy
+-------------> data/stanford_indoor3d/Area_2_hallway_6.npy
+-------------> data/stanford_indoor3d/Area_2_hallway_7.npy
+-------------> data/stanford_indoor3d/Area_2_hallway_8.npy
+-------------> data/stanford_indoor3d/Area_2_hallway_9.npy
+-------------> data/stanford_indoor3d/Area_2_office_1.npy
+-------------> data/stanford_indoor3d/Area_2_office_10.npy
+-------------> data/stanford_indoor3d/Area_2_office_11.npy
+-------------> data/stanford_indoor3d/Area_2_office_12.npy
+-------------> data/stanford_indoor3d/Area_2_office_13.npy
+-------------> data/stanford_indoor3d/Area_2_office_14.npy
+-------------> data/stanford_indoor3d/Area_2_office_2.npy
+-------------> data/stanford_indoor3d/Area_2_office_3.npy
+-------------> data/stanford_indoor3d/Area_2_office_4.npy
+-------------> data/stanford_indoor3d/Area_2_office_5.npy
+-------------> data/stanford_indoor3d/Area_2_office_6.npy
+-------------> data/stanford_indoor3d/Area_2_office_7.npy
+-------------> data/stanford_indoor3d/Area_2_office_8.npy
+-------------> data/stanford_indoor3d/Area_2_office_9.npy
+-------------> data/stanford_indoor3d/Area_2_storage_1.npy
+-------------> data/stanford_indoor3d/Area_2_storage_2.npy
+-------------> data/stanford_indoor3d/Area_2_storage_3.npy
+-------------> data/stanford_indoor3d/Area_2_storage_4.npy
+-------------> data/stanford_indoor3d/Area_2_storage_5.npy
+-------------> data/stanford_indoor3d/Area_2_storage_6.npy
+-------------> data/stanford_indoor3d/Area_2_storage_7.npy
+-------------> data/stanford_indoor3d/Area_2_storage_8.npy
+-------------> data/stanford_indoor3d/Area_2_storage_9.npy
+-------------> data/stanford_indoor3d/Area_3_WC_1.npy
+-------------> data/stanford_indoor3d/Area_3_WC_2.npy
+-------------> data/stanford_indoor3d/Area_3_conferenceRoom_1.npy
+-------------> data/stanford_indoor3d/Area_3_hallway_1.npy
+-------------> data/stanford_indoor3d/Area_3_hallway_2.npy
+-------------> data/stanford_indoor3d/Area_3_hallway_3.npy
+-------------> data/stanford_indoor3d/Area_3_hallway_4.npy
+-------------> data/stanford_indoor3d/Area_3_hallway_5.npy
+-------------> data/stanford_indoor3d/Area_3_hallway_6.npy
+-------------> data/stanford_indoor3d/Area_3_lounge_1.npy
+-------------> data/stanford_indoor3d/Area_3_lounge_2.npy
+-------------> data/stanford_indoor3d/Area_3_office_1.npy
+-------------> data/stanford_indoor3d/Area_3_office_10.npy
+-------------> data/stanford_indoor3d/Area_3_office_2.npy
+-------------> data/stanford_indoor3d/Area_3_office_3.npy
+-------------> data/stanford_indoor3d/Area_3_office_4.npy
+-------------> data/stanford_indoor3d/Area_3_office_5.npy
+-------------> data/stanford_indoor3d/Area_3_office_6.npy
+-------------> data/stanford_indoor3d/Area_3_office_7.npy
+-------------> data/stanford_indoor3d/Area_3_office_8.npy
+-------------> data/stanford_indoor3d/Area_3_office_9.npy
+-------------> data/stanford_indoor3d/Area_3_storage_1.npy
+-------------> data/stanford_indoor3d/Area_3_storage_2.npy
+-------------> data/stanford_indoor3d/Area_4_WC_1.npy
+-------------> data/stanford_indoor3d/Area_4_WC_2.npy
+-------------> data/stanford_indoor3d/Area_4_WC_3.npy
+-------------> data/stanford_indoor3d/Area_4_WC_4.npy
+-------------> data/stanford_indoor3d/Area_4_conferenceRoom_1.npy
+-------------> data/stanford_indoor3d/Area_4_conferenceRoom_2.npy
+-------------> data/stanford_indoor3d/Area_4_conferenceRoom_3.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_1.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_10.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_11.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_12.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_13.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_14.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_2.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_3.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_4.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_5.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_6.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_7.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_8.npy
+-------------> data/stanford_indoor3d/Area_4_hallway_9.npy
+-------------> data/stanford_indoor3d/Area_4_lobby_1.npy
+-------------> data/stanford_indoor3d/Area_4_lobby_2.npy
+-------------> data/stanford_indoor3d/Area_4_office_1.npy
+-------------> data/stanford_indoor3d/Area_4_office_10.npy
+-------------> data/stanford_indoor3d/Area_4_office_11.npy
+-------------> data/stanford_indoor3d/Area_4_office_12.npy
+-------------> data/stanford_indoor3d/Area_4_office_13.npy
+-------------> data/stanford_indoor3d/Area_4_office_14.npy
+-------------> data/stanford_indoor3d/Area_4_office_15.npy
+-------------> data/stanford_indoor3d/Area_4_office_16.npy
+-------------> data/stanford_indoor3d/Area_4_office_17.npy
+-------------> data/stanford_indoor3d/Area_4_office_18.npy
+-------------> data/stanford_indoor3d/Area_4_office_19.npy
+-------------> data/stanford_indoor3d/Area_4_office_2.npy
+-------------> data/stanford_indoor3d/Area_4_office_20.npy
+-------------> data/stanford_indoor3d/Area_4_office_21.npy
+-------------> data/stanford_indoor3d/Area_4_office_22.npy
+-------------> data/stanford_indoor3d/Area_4_office_3.npy
+-------------> data/stanford_indoor3d/Area_4_office_4.npy
+-------------> data/stanford_indoor3d/Area_4_office_5.npy
+-------------> data/stanford_indoor3d/Area_4_office_6.npy
+-------------> data/stanford_indoor3d/Area_4_office_7.npy
+-------------> data/stanford_indoor3d/Area_4_office_8.npy
+-------------> data/stanford_indoor3d/Area_4_office_9.npy
+-------------> data/stanford_indoor3d/Area_4_storage_1.npy
+-------------> data/stanford_indoor3d/Area_4_storage_2.npy
+-------------> data/stanford_indoor3d/Area_4_storage_3.npy
+-------------> data/stanford_indoor3d/Area_4_storage_4.npy
+-------------> data/stanford_indoor3d/Area_6_conferenceRoom_1.npy
+-------------> data/stanford_indoor3d/Area_6_copyRoom_1.npy
+-------------> data/stanford_indoor3d/Area_6_hallway_1.npy
+-------------> data/stanford_indoor3d/Area_6_hallway_2.npy
+-------------> data/stanford_indoor3d/Area_6_hallway_3.npy
+-------------> data/stanford_indoor3d/Area_6_hallway_4.npy
+-------------> data/stanford_indoor3d/Area_6_hallway_5.npy
+-------------> data/stanford_indoor3d/Area_6_hallway_6.npy
+-------------> data/stanford_indoor3d/Area_6_lounge_1.npy
+-------------> data/stanford_indoor3d/Area_6_office_1.npy
+-------------> data/stanford_indoor3d/Area_6_office_10.npy
+-------------> data/stanford_indoor3d/Area_6_office_11.npy
+-------------> data/stanford_indoor3d/Area_6_office_12.npy
+-------------> data/stanford_indoor3d/Area_6_office_13.npy
+-------------> data/stanford_indoor3d/Area_6_office_14.npy
+-------------> data/stanford_indoor3d/Area_6_office_15.npy
+-------------> data/stanford_indoor3d/Area_6_office_16.npy
+-------------> data/stanford_indoor3d/Area_6_office_17.npy
+-------------> data/stanford_indoor3d/Area_6_office_18.npy
+-------------> data/stanford_indoor3d/Area_6_office_19.npy
+-------------> data/stanford_indoor3d/Area_6_office_2.npy
+-------------> data/stanford_indoor3d/Area_6_office_20.npy
+-------------> data/stanford_indoor3d/Area_6_office_21.npy
+-------------> data/stanford_indoor3d/Area_6_office_22.npy
+-------------> data/stanford_indoor3d/Area_6_office_23.npy
+-------------> data/stanford_indoor3d/Area_6_office_24.npy
+-------------> data/stanford_indoor3d/Area_6_office_25.npy
+-------------> data/stanford_indoor3d/Area_6_office_26.npy
+-------------> data/stanford_indoor3d/Area_6_office_27.npy
+-------------> data/stanford_indoor3d/Area_6_office_28.npy
+-------------> data/stanford_indoor3d/Area_6_office_29.npy
+-------------> data/stanford_indoor3d/Area_6_office_3.npy
+-------------> data/stanford_indoor3d/Area_6_office_30.npy
+-------------> data/stanford_indoor3d/Area_6_office_31.npy
+-------------> data/stanford_indoor3d/Area_6_office_32.npy
+-------------> data/stanford_indoor3d/Area_6_office_33.npy
+-------------> data/stanford_indoor3d/Area_6_office_34.npy
+-------------> data/stanford_indoor3d/Area_6_office_35.npy
+-------------> data/stanford_indoor3d/Area_6_office_36.npy
+-------------> data/stanford_indoor3d/Area_6_office_37.npy
+-------------> data/stanford_indoor3d/Area_6_office_4.npy
+-------------> data/stanford_indoor3d/Area_6_office_5.npy
+-------------> data/stanford_indoor3d/Area_6_office_6.npy
+-------------> data/stanford_indoor3d/Area_6_office_7.npy
+-------------> data/stanford_indoor3d/Area_6_office_8.npy
+-------------> data/stanford_indoor3d/Area_6_office_9.npy
+-------------> data/stanford_indoor3d/Area_6_openspace_1.npy
+-------------> data/stanford_indoor3d/Area_6_pantry_1.npy
+[1.124833  1.1816078 1.        2.2412012 2.340336  2.343587  1.7070498
+ 2.0335796 1.8852289 3.8252103 1.7948895 2.7857335 1.3452303]
+Totally 190441 samples in train set.
+start loading test data ...
+-------------> data/stanford_indoor3d/Area_5_WC_1.npy
+-------------> data/stanford_indoor3d/Area_5_WC_2.npy
+-------------> data/stanford_indoor3d/Area_5_conferenceRoom_1.npy
+-------------> data/stanford_indoor3d/Area_5_conferenceRoom_2.npy
+-------------> data/stanford_indoor3d/Area_5_conferenceRoom_3.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_1.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_10.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_11.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_12.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_13.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_14.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_15.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_2.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_3.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_4.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_5.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_6.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_7.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_8.npy
+-------------> data/stanford_indoor3d/Area_5_hallway_9.npy
+-------------> data/stanford_indoor3d/Area_5_lobby_1.npy
+-------------> data/stanford_indoor3d/Area_5_office_1.npy
+-------------> data/stanford_indoor3d/Area_5_office_10.npy
+-------------> data/stanford_indoor3d/Area_5_office_11.npy
+-------------> data/stanford_indoor3d/Area_5_office_12.npy
+-------------> data/stanford_indoor3d/Area_5_office_13.npy
+-------------> data/stanford_indoor3d/Area_5_office_14.npy
+-------------> data/stanford_indoor3d/Area_5_office_15.npy
+-------------> data/stanford_indoor3d/Area_5_office_16.npy
+-------------> data/stanford_indoor3d/Area_5_office_17.npy
+-------------> data/stanford_indoor3d/Area_5_office_18.npy
+-------------> data/stanford_indoor3d/Area_5_office_19.npy
+-------------> data/stanford_indoor3d/Area_5_office_2.npy
+-------------> data/stanford_indoor3d/Area_5_office_20.npy
+-------------> data/stanford_indoor3d/Area_5_office_21.npy
+-------------> data/stanford_indoor3d/Area_5_office_22.npy
+-------------> data/stanford_indoor3d/Area_5_office_23.npy
+-------------> data/stanford_indoor3d/Area_5_office_24.npy
+-------------> data/stanford_indoor3d/Area_5_office_25.npy
+-------------> data/stanford_indoor3d/Area_5_office_26.npy
+-------------> data/stanford_indoor3d/Area_5_office_27.npy
+-------------> data/stanford_indoor3d/Area_5_office_28.npy
+-------------> data/stanford_indoor3d/Area_5_office_29.npy
+-------------> data/stanford_indoor3d/Area_5_office_3.npy
+-------------> data/stanford_indoor3d/Area_5_office_30.npy
+-------------> data/stanford_indoor3d/Area_5_office_31.npy
+-------------> data/stanford_indoor3d/Area_5_office_32.npy
+-------------> data/stanford_indoor3d/Area_5_office_33.npy
+-------------> data/stanford_indoor3d/Area_5_office_34.npy
+-------------> data/stanford_indoor3d/Area_5_office_35.npy
+-------------> data/stanford_indoor3d/Area_5_office_36.npy
+-------------> data/stanford_indoor3d/Area_5_office_37.npy
+-------------> data/stanford_indoor3d/Area_5_office_38.npy
+-------------> data/stanford_indoor3d/Area_5_office_39.npy
+-------------> data/stanford_indoor3d/Area_5_office_4.npy
+-------------> data/stanford_indoor3d/Area_5_office_40.npy
+-------------> data/stanford_indoor3d/Area_5_office_41.npy
+-------------> data/stanford_indoor3d/Area_5_office_42.npy
+-------------> data/stanford_indoor3d/Area_5_office_5.npy
+-------------> data/stanford_indoor3d/Area_5_office_6.npy
+-------------> data/stanford_indoor3d/Area_5_office_7.npy
+-------------> data/stanford_indoor3d/Area_5_office_8.npy
+-------------> data/stanford_indoor3d/Area_5_office_9.npy
+-------------> data/stanford_indoor3d/Area_5_pantry_1.npy
+-------------> data/stanford_indoor3d/Area_5_storage_1.npy
+-------------> data/stanford_indoor3d/Area_5_storage_2.npy
+-------------> data/stanford_indoor3d/Area_5_storage_3.npy
+-------------> data/stanford_indoor3d/Area_5_storage_4.npy
+[ 1.1427666  1.2085758  1.        10.0776825  2.5504515  2.0249689
+  2.1271675  1.9817276  2.5017133  4.765974   1.4132063  2.9075055
+  1.484701 ]
+Totally 76747 samples in test set.
+The number of training data is: 190441
+The number of test data is: 76747
+No existing model, starting training from scratch...
+**** Epoch 1 (1/32) ****
+Learning rate:0.001000
+BN momentum updated to: 0.100000
+Training mean loss: 0.558832
+Training accuracy: 0.833880
+Saving at log/sem_seg/2023-10-19_22-40/checkpoints/model.pth
+Saving model....
+---- EPOCH 001 EVALUATION ----
+eval mean loss: 0.952885
+eval point avg class IoU: 0.469802
+eval point accuracy: 0.794438
+eval point avg class acc: 0.596914
+------- IoU --------
+class ceiling        weight: 0.091, IoU: 0.887 
+class floor          weight: 0.200, IoU: 0.963 
+class wall           weight: 0.167, IoU: 0.705 
+class beam           weight: 0.279, IoU: 0.000 
+class column         weight: 0.000, IoU: 0.001 
+class window         weight: 0.018, IoU: 0.508 
+class door           weight: 0.033, IoU: 0.125 
+class table          weight: 0.030, IoU: 0.636 
+class chair          weight: 0.039, IoU: 0.675 
+class sofa           weight: 0.019, IoU: 0.341 
+class bookcase       weight: 0.003, IoU: 0.465 
+class board          weight: 0.109, IoU: 0.457 
+class clutter        weight: 0.012, IoU: 0.345 
+
+Eval mean loss: 0.952885
+Eval accuracy: 0.794438
+Saving at log/sem_seg/2023-10-19_22-40/checkpoints/best_model.pth
+Saving model....
+Best mIoU: 0.469802
+**** Epoch 2 (2/32) ****
+Learning rate:0.001000
+BN momentum updated to: 0.100000
+Training mean loss: 0.346121
+Training accuracy: 0.890685
+---- EPOCH 002 EVALUATION ----
+eval mean loss: 0.941484
+eval point avg class IoU: 0.477416
+eval point accuracy: 0.805208
+eval point avg class acc: 0.603393
+------- IoU --------
+class ceiling        weight: 0.091, IoU: 0.894 
+class floor          weight: 0.200, IoU: 0.971 
+class wall           weight: 0.167, IoU: 0.717 
+class beam           weight: 0.279, IoU: 0.000 
+class column         weight: 0.000, IoU: 0.068 
+class window         weight: 0.018, IoU: 0.559 
+class door           weight: 0.034, IoU: 0.097 
+class table          weight: 0.031, IoU: 0.659 
+class chair          weight: 0.039, IoU: 0.642 
+class sofa           weight: 0.019, IoU: 0.314 
+class bookcase       weight: 0.003, IoU: 0.542 
+class board          weight: 0.108, IoU: 0.362 
+class clutter        weight: 0.012, IoU: 0.381 
+
+Eval mean loss: 0.941484
+Eval accuracy: 0.805208
+Saving at log/sem_seg/2023-10-19_22-40/checkpoints/best_model.pth
+Saving model....
+Best mIoU: 0.477416
+**** Epoch 3 (3/32) ****
+Learning rate:0.001000
+BN momentum updated to: 0.100000
+Training mean loss: 0.294609
+Training accuracy: 0.905829
+---- EPOCH 003 EVALUATION ----
+eval mean loss: 0.947285
+eval point avg class IoU: 0.479241
+eval point accuracy: 0.795593
+eval point avg class acc: 0.577465
+------- IoU --------
+class ceiling        weight: 0.091, IoU: 0.880 
+class floor          weight: 0.200, IoU: 0.965 
+class wall           weight: 0.167, IoU: 0.706 
+class beam           weight: 0.281, IoU: 0.000 
+class column         weight: 0.000, IoU: 0.080 
+class window         weight: 0.017, IoU: 0.575 
+class door           weight: 0.033, IoU: 0.098 
+class table          weight: 0.031, IoU: 0.630 
+class chair          weight: 0.038, IoU: 0.656 
+class sofa           weight: 0.019, IoU: 0.233 
+class bookcase       weight: 0.003, IoU: 0.543 
+class board          weight: 0.108, IoU: 0.484 
+class clutter        weight: 0.012, IoU: 0.382 
+
+Eval mean loss: 0.947285
+Eval accuracy: 0.795593
+Saving at log/sem_seg/2023-10-19_22-40/checkpoints/best_model.pth
+Saving model....
+Best mIoU: 0.479241
+**** Epoch 4 (4/32) ****
+Learning rate:0.001000
+BN momentum updated to: 0.100000
+Training mean loss: 0.264788
+Training accuracy: 0.914952
+---- EPOCH 004 EVALUATION ----
+eval mean loss: 0.950458
+eval point avg class IoU: 0.484280
+eval point accuracy: 0.814911
+eval point avg class acc: 0.613958
+------- IoU --------
+class ceiling        weight: 0.091, IoU: 0.896 
+class floor          weight: 0.200, IoU: 0.954 
+class wall           weight: 0.166, IoU: 0.736 
+class beam           weight: 0.281, IoU: 0.000 
+class column         weight: 0.000, IoU: 0.063 
+class window         weight: 0.018, IoU: 0.584 
+class door           weight: 0.033, IoU: 0.072 
+class table          weight: 0.030, IoU: 0.665 
+class chair          weight: 0.038, IoU: 0.637 
+class sofa           weight: 0.019, IoU: 0.317 
+class bookcase       weight: 0.003, IoU: 0.580 
+class board          weight: 0.109, IoU: 0.413 
+class clutter        weight: 0.011, IoU: 0.378 
+
+Eval mean loss: 0.950458
+Eval accuracy: 0.814911
+Saving at log/sem_seg/2023-10-19_22-40/checkpoints/best_model.pth
+Saving model....
+Best mIoU: 0.484280
+**** Epoch 5 (5/32) ****
+Learning rate:0.001000
+BN momentum updated to: 0.100000
+Training mean loss: 0.249839
+Training accuracy: 0.919410
+---- EPOCH 005 EVALUATION ----
+eval mean loss: 0.990161
+eval point avg class IoU: 0.474188
+eval point accuracy: 0.798085
+eval point avg class acc: 0.582014
+------- IoU --------
+class ceiling        weight: 0.091, IoU: 0.883 
+class floor          weight: 0.200, IoU: 0.960 
+class wall           weight: 0.167, IoU: 0.713 
+class beam           weight: 0.280, IoU: 0.000 
+class column         weight: 0.000, IoU: 0.077 
+class window         weight: 0.018, IoU: 0.590 
+class door           weight: 0.034, IoU: 0.095 
+class table          weight: 0.030, IoU: 0.644 
+class chair          weight: 0.039, IoU: 0.648 
+class sofa           weight: 0.019, IoU: 0.166 
+class bookcase       weight: 0.003, IoU: 0.560 
+class board          weight: 0.107, IoU: 0.444 
+class clutter        weight: 0.011, IoU: 0.385 
+
+Eval mean loss: 0.990161
+Eval accuracy: 0.798085
+Best mIoU: 0.484280
+**** Epoch 6 (6/32) ****
+Learning rate:0.001000
+BN momentum updated to: 0.100000
+Training mean loss: 0.241726
+Training accuracy: 0.921733
+Saving at log/sem_seg/2023-10-19_22-40/checkpoints/model.pth
+Saving model....
+---- EPOCH 006 EVALUATION ----
+eval mean loss: 0.973483
+eval point avg class IoU: 0.481652
+eval point accuracy: 0.807221
+eval point avg class acc: 0.599983
+------- IoU --------
+class ceiling        weight: 0.091, IoU: 0.894 
+class floor          weight: 0.201, IoU: 0.973 
+class wall           weight: 0.168, IoU: 0.737 
+class beam           weight: 0.279, IoU: 0.000 
+class column         weight: 0.000, IoU: 0.085 
+class window         weight: 0.018, IoU: 0.561 
+class door           weight: 0.033, IoU: 0.099 
+class table          weight: 0.030, IoU: 0.648 
+class chair          weight: 0.039, IoU: 0.649 
+class sofa           weight: 0.019, IoU: 0.261 
+class bookcase       weight: 0.003, IoU: 0.480 
+class board          weight: 0.108, IoU: 0.490 
+class clutter        weight: 0.011, IoU: 0.384 
+
+Eval mean loss: 0.973483
+Eval accuracy: 0.807221
+Best mIoU: 0.484280
+**** Epoch 7 (7/32) ****
+Learning rate:0.001000
+BN momentum updated to: 0.100000
+Training mean loss: 0.236465
+Training accuracy: 0.923439
+---- EPOCH 007 EVALUATION ----
+eval mean loss: 0.971853
+eval point avg class IoU: 0.493164
+eval point accuracy: 0.815369
+eval point avg class acc: 0.595349
+------- IoU --------
+class ceiling        weight: 0.091, IoU: 0.899 
+class floor          weight: 0.201, IoU: 0.972 
+class wall           weight: 0.167, IoU: 0.739 
+class beam           weight: 0.279, IoU: 0.004 
+class column         weight: 0.000, IoU: 0.082 
+class window         weight: 0.018, IoU: 0.448 
+class door           weight: 0.033, IoU: 0.135 
+class table          weight: 0.030, IoU: 0.640 
+class chair          weight: 0.039, IoU: 0.696 
+class sofa           weight: 0.019, IoU: 0.313 
+class bookcase       weight: 0.003, IoU: 0.558 
+class board          weight: 0.108, IoU: 0.520 
+class clutter        weight: 0.012, IoU: 0.406 
+
+Eval mean loss: 0.971853
+Eval accuracy: 0.815369
+Saving at log/sem_seg/2023-10-19_22-40/checkpoints/best_model.pth
+Saving model....
+Best mIoU: 0.493164
+**** Epoch 8 (8/32) ****
+Learning rate:0.001000
+BN momentum updated to: 0.100000
+Training mean loss: 0.229151
+Training accuracy: 0.925640
+---- EPOCH 008 EVALUATION ----
+eval mean loss: 0.914165
+eval point avg class IoU: 0.495787
+eval point accuracy: 0.818618
+eval point avg class acc: 0.590080
+------- IoU --------
+class ceiling        weight: 0.091, IoU: 0.901 
+class floor          weight: 0.201, IoU: 0.971 
+class wall           weight: 0.167, IoU: 0.738 
+class beam           weight: 0.279, IoU: 0.001 
+class column         weight: 0.000, IoU: 0.110 
+class window         weight: 0.018, IoU: 0.544 
+class door           weight: 0.033, IoU: 0.110 
+class table          weight: 0.030, IoU: 0.684 
+class chair          weight: 0.039, IoU: 0.714 
+class sofa           weight: 0.019, IoU: 0.217 
+class bookcase       weight: 0.003, IoU: 0.553 
+class board          weight: 0.108, IoU: 0.477 
+class clutter        weight: 0.011, IoU: 0.426 
+
+Eval mean loss: 0.914165
+Eval accuracy: 0.818618
+Saving at log/sem_seg/2023-10-19_22-40/checkpoints/best_model.pth
+Saving model....
+Best mIoU: 0.495787
+**** Epoch 9 (9/32) ****
+Learning rate:0.001000
+BN momentum updated to: 0.100000
+Training mean loss: 0.225819
+Training accuracy: 0.926597
+---- EPOCH 009 EVALUATION ----
+eval mean loss: 1.087788
+eval point avg class IoU: 0.495599
+eval point accuracy: 0.815099
+eval point avg class acc: 0.577955
+------- IoU --------
+class ceiling        weight: 0.091, IoU: 0.898 
+class floor          weight: 0.200, IoU: 0.972 
+class wall           weight: 0.167, IoU: 0.734 
+class beam           weight: 0.280, IoU: 0.001 
+class column         weight: 0.000, IoU: 0.124 
+class window         weight: 0.018, IoU: 0.562 
+class door           weight: 0.033, IoU: 0.115 
+class table          weight: 0.030, IoU: 0.683 
+class chair          weight: 0.039, IoU: 0.721 
+class sofa           weight: 0.019, IoU: 0.220 
+class bookcase       weight: 0.003, IoU: 0.533 
+class board          weight: 0.108, IoU: 0.475 
+class clutter        weight: 0.011, IoU: 0.403 
+
+Eval mean loss: 1.087788
+Eval accuracy: 0.815099
+Best mIoU: 0.495787
+**** Epoch 10 (10/32) ****
+Learning rate:0.001000
+BN momentum updated to: 0.100000
+Training mean loss: 0.219018
+Training accuracy: 0.928645
+---- EPOCH 010 EVALUATION ----
+eval mean loss: 0.983482
+eval point avg class IoU: 0.475347
+eval point accuracy: 0.813463
+eval point avg class acc: 0.580613
+------- IoU --------
+class ceiling        weight: 0.092, IoU: 0.908 
+class floor          weight: 0.201, IoU: 0.968 
+class wall           weight: 0.167, IoU: 0.733 
+class beam           weight: 0.279, IoU: 0.000 
+class column         weight: 0.000, IoU: 0.076 
+class window         weight: 0.018, IoU: 0.535 
+class door           weight: 0.033, IoU: 0.130 
+class table          weight: 0.030, IoU: 0.642 
+class chair          weight: 0.039, IoU: 0.593 
+class sofa           weight: 0.019, IoU: 0.132 
+class bookcase       weight: 0.003, IoU: 0.566 
+class board          weight: 0.108, IoU: 0.489 
+class clutter        weight: 0.012, IoU: 0.407 
+
+Eval mean loss: 0.983482
+Eval accuracy: 0.813463
+Best mIoU: 0.495787
+**** Epoch 11 (11/32) ****
+Learning rate:0.000700
+BN momentum updated to: 0.050000
+Training mean loss: 0.190673
+Training accuracy: 0.936862
+Saving at log/sem_seg/2023-10-19_22-40/checkpoints/model.pth
+Saving model....
+---- EPOCH 011 EVALUATION ----
+eval mean loss: 1.024673
+eval point avg class IoU: 0.498972
+eval point accuracy: 0.810904
+eval point avg class acc: 0.602299
+------- IoU --------
+class ceiling        weight: 0.091, IoU: 0.895 
+class floor          weight: 0.200, IoU: 0.974 
+class wall           weight: 0.167, IoU: 0.726 
+class beam           weight: 0.280, IoU: 0.000 
+class column         weight: 0.000, IoU: 0.120 
+class window         weight: 0.018, IoU: 0.553 
+class door           weight: 0.033, IoU: 0.070 
+class table          weight: 0.030, IoU: 0.689 
+class chair          weight: 0.039, IoU: 0.706 
+class sofa           weight: 0.019, IoU: 0.307 
+class bookcase       weight: 0.003, IoU: 0.552 
+class board          weight: 0.108, IoU: 0.491 
+class clutter        weight: 0.011, IoU: 0.403 
+
+Eval mean loss: 1.024673
+Eval accuracy: 0.810904
+Saving at log/sem_seg/2023-10-19_22-40/checkpoints/best_model.pth
+Saving model....
+Best mIoU: 0.498972
+**** Epoch 12 (12/32) ****
+Learning rate:0.000700
+BN momentum updated to: 0.050000
+Training mean loss: 0.181712
+Training accuracy: 0.939895
+---- EPOCH 012 EVALUATION ----
+eval mean loss: 1.090333
+eval point avg class IoU: 0.487584
+eval point accuracy: 0.798717
+eval point avg class acc: 0.581674
+------- IoU --------
+class ceiling        weight: 0.091, IoU: 0.909 
+class floor          weight: 0.200, IoU: 0.966 
+class wall           weight: 0.166, IoU: 0.690 
+class beam           weight: 0.279, IoU: 0.001 
+class column         weight: 0.000, IoU: 0.098 
+class window         weight: 0.018, IoU: 0.524 
+class door           weight: 0.033, IoU: 0.089 
+class table          weight: 0.030, IoU: 0.686 
+class chair          weight: 0.039, IoU: 0.711 
+class sofa           weight: 0.019, IoU: 0.188 
+class bookcase       weight: 0.003, IoU: 0.556 
+class board          weight: 0.110, IoU: 0.516 
+class clutter        weight: 0.011, IoU: 0.405 
+
+Eval mean loss: 1.090333
+Eval accuracy: 0.798717
+Best mIoU: 0.498972
+**** Epoch 13 (13/32) ****
+Learning rate:0.000700
+BN momentum updated to: 0.050000
+Training mean loss: 0.181757
+Training accuracy: 0.939692
+---- EPOCH 013 EVALUATION ----
+eval mean loss: 1.091331
+eval point avg class IoU: 0.494673
+eval point accuracy: 0.807977
+eval point avg class acc: 0.595010
+------- IoU --------
+class ceiling        weight: 0.092, IoU: 0.902 
+class floor          weight: 0.200, IoU: 0.953 
+class wall           weight: 0.167, IoU: 0.726 
+class beam           weight: 0.281, IoU: 0.000 
+class column         weight: 0.000, IoU: 0.109 
+class window         weight: 0.018, IoU: 0.566 
+class door           weight: 0.032, IoU: 0.059 
+class table          weight: 0.030, IoU: 0.678 
+class chair          weight: 0.039, IoU: 0.733 
+class sofa           weight: 0.019, IoU: 0.295 
+class bookcase       weight: 0.003, IoU: 0.552 
+class board          weight: 0.108, IoU: 0.455 
+class clutter        weight: 0.012, IoU: 0.402 
+
+Eval mean loss: 1.091331
+Eval accuracy: 0.807977
+Best mIoU: 0.498972
+**** Epoch 14 (14/32) ****
+Learning rate:0.000700
+BN momentum updated to: 0.050000
+Training mean loss: 0.180689
+Training accuracy: 0.939925
+---- EPOCH 014 EVALUATION ----
+eval mean loss: 1.073863
+eval point avg class IoU: 0.492957
+eval point accuracy: 0.797763
+eval point avg class acc: 0.601751
+------- IoU --------
+class ceiling        weight: 0.091, IoU: 0.906 
+class floor          weight: 0.201, IoU: 0.971 
+class wall           weight: 0.168, IoU: 0.700 
+class beam           weight: 0.279, IoU: 0.002 
+class column         weight: 0.000, IoU: 0.103 
+class window         weight: 0.018, IoU: 0.562 
+class door           weight: 0.033, IoU: 0.077 
+class table          weight: 0.030, IoU: 0.652 
+class chair          weight: 0.039, IoU: 0.723 
+class sofa           weight: 0.019, IoU: 0.249 
+class bookcase       weight: 0.003, IoU: 0.533 
+class board          weight: 0.108, IoU: 0.527 
+class clutter        weight: 0.012, IoU: 0.405 
+
+Eval mean loss: 1.073863
+Eval accuracy: 0.797763
+Best mIoU: 0.498972
+**** Epoch 15 (15/32) ****
+Learning rate:0.000700
+BN momentum updated to: 0.050000
+Training mean loss: 0.180722
+Training accuracy: 0.940097
+---- EPOCH 015 EVALUATION ----

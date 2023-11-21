@@ -31,7 +31,7 @@ def parse_args():
     parser.add_argument('--batch_size', type=int, default=24, help='batch size in training')
     parser.add_argument('--model', default='pointnet_cls', help='model name [default: pointnet_cls]')
     parser.add_argument('--num_category', default=40, type=int, choices=[10, 40],  help='training on ModelNet10/40')
-    parser.add_argument('--epoch', default=200, type=int, help='number of epoch in training')
+    parser.add_argument('--epoch', default=100, type=int, help='number of epoch in training')
     parser.add_argument('--learning_rate', default=0.001, type=float, help='learning rate in training')
     parser.add_argument('--num_point', type=int, default=1024, help='Point Number')
     parser.add_argument('--optimizer', type=str, default='Adam', help='optimizer for training')
@@ -56,8 +56,8 @@ def test(model, loader, num_class=40):
 
     for j, (points, target) in tqdm(enumerate(loader), total=len(loader)):
 
-        if not args.use_cpu:
-            points, target = points.cuda(), target.cuda()
+        # if not args.use_cpu:
+        points, target = points.cuda(), target.cuda()
 
         points = points.transpose(2, 1)
         pred, _ = classifier(points)
@@ -169,8 +169,10 @@ def main(args):
     for epoch in range(start_epoch, args.epoch):
         log_string('Epoch %d (%d/%s):' % (global_epoch + 1, epoch + 1, args.epoch))
         mean_correct = []
+        mean_loss = []
         classifier = classifier.train()
-
+        # optimizer:step()通常用在每個mini-batch之中，而scheduler.step(通常用在epoch裡面)
+        # 只有用了optimizer.step()，模型才會更新，而scheduler.step >> 對lr進行調整
         scheduler.step()
         for batch_id, (points, target) in tqdm(enumerate(trainDataLoader, 0), total=len(trainDataLoader), smoothing=0.9):
             optimizer.zero_grad()
@@ -187,16 +189,24 @@ def main(args):
 
             pred, trans_feat = classifier(points)
             loss = criterion(pred, target.long(), trans_feat)
+            # loss_numpy = loss.cpu().detach().numpy()
+            # print("loss_numpy",loss_numpy)
+            # mean_loss.append(loss_numpy)
             pred_choice = pred.data.max(1)[1]
 
             correct = pred_choice.eq(target.long().data).cpu().sum()
             mean_correct.append(correct.item() / float(points.size()[0]))
             loss.backward()
+            loss_cpu = loss.item()
+            mean_loss.append(loss_cpu)
+            # print("loss_cpu",loss_cpu)
             optimizer.step()
             global_step += 1
 
         train_instance_acc = np.mean(mean_correct)
+        train_instance_loss = np.mean(mean_loss)
         log_string('Train Instance Accuracy: %f' % train_instance_acc)
+        log_string('Train Instance Loss: %f' % train_instance_loss)
 
         with torch.no_grad():
             instance_acc, class_acc = test(classifier.eval(), testDataLoader, num_class=num_class)

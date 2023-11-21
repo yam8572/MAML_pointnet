@@ -1,0 +1,162 @@
+start training time=2023-11-16 20:24:36
+Epoch 1 (1/100):
+Train Instance Accuracy: 0.378010
+Epoch 2 (2/100):
+Train Instance Accuracy: 0.377207
+Epoch 3 (3/100):
+Train Instance Accuracy: 0.315811
+Epoch 4 (4/100):
+Train Instance Accuracy: 0.270064
+Epoch 5 (5/100):
+Train Instance Accuracy: 0.290530
+Epoch 6 (6/100):
+Train Instance Accuracy: 0.282905
+Epoch 7 (7/100):
+Train Instance Accuracy: 0.290931
+Epoch 8 (8/100):
+Train Instance Accuracy: 0.292536
+Epoch 9 (9/100):
+Train Instance Accuracy: 0.280899
+Epoch 10 (10/100):
+Train Instance Accuracy: 0.268459
+Epoch 11 (11/100):
+Train Instance Accuracy: 0.300562
+Epoch 12 (12/100):
+Train Instance Accuracy: 0.290128
+Epoch 13 (13/100):
+Train Instance Accuracy: 0.282504
+Epoch 14 (14/100):
+Train Instance Accuracy: 0.329053
+Epoch 15 (15/100):
+Train Instance Accuracy: 0.349920
+Epoch 16 (16/100):
+Train Instance Accuracy: 0.323435
+Epoch 17 (17/100):
+Train Instance Accuracy: 0.300562
+Epoch 18 (18/100):
+Train Instance Accuracy: 0.283708
+Epoch 19 (19/100):
+Train Instance Accuracy: 0.243981
+Epoch 20 (20/100):
+Train Instance Accuracy: 0.266854
+Epoch 21 (21/100):
+Train Instance Accuracy: 0.292135
+Epoch 22 (22/100):
+Train Instance Accuracy: 0.308186
+Epoch 23 (23/100):
+Train Instance Accuracy: 0.318620
+Epoch 24 (24/100):
+Train Instance Accuracy: 0.264848
+Epoch 25 (25/100):
+Train Instance Accuracy: 0.237560
+Epoch 26 (26/100):
+Train Instance Accuracy: 0.263242
+Epoch 27 (27/100):
+Train Instance Accuracy: 0.288122
+Epoch 28 (28/100):
+Train Instance Accuracy: 0.298154
+Epoch 29 (29/100):
+Train Instance Accuracy: 0.297352
+Epoch 30 (30/100):
+Train Instance Accuracy: 0.288925
+Epoch 31 (31/100):
+Train Instance Accuracy: 0.247592
+Epoch 32 (32/100):
+Train Instance Accuracy: 0.232745
+Epoch 33 (33/100):
+Train Instance Accuracy: 0.244382
+Epoch 34 (34/100):
+Train Instance Accuracy: 0.238764
+Epoch 35 (35/100):
+Train Instance Accuracy: 0.246790
+Epoch 36 (36/100):
+Train Instance Accuracy: 0.279695
+Epoch 37 (37/100):
+Train Instance Accuracy: 0.281701
+Epoch 38 (38/100):
+Train Instance Accuracy: 0.287319
+Epoch 39 (39/100):
+Train Instance Accuracy: 0.296549
+Epoch 40 (40/100):
+Train Instance Accuracy: 0.302167
+Epoch 41 (41/100):
+Train Instance Accuracy: 0.314607
+Epoch 42 (42/100):
+Train Instance Accuracy: 0.294141
+Epoch 43 (43/100):
+Train Instance Accuracy: 0.270465
+Epoch 44 (44/100):
+Train Instance Accuracy: 0.278491
+Epoch 45 (45/100):
+Train Instance Accuracy: 0.284912
+Epoch 46 (46/100):
+Train Instance Accuracy: 0.294944
+Epoch 47 (47/100):
+Train Instance Accuracy: 0.272873
+Epoch 48 (48/100):
+Train Instance Accuracy: 0.269663
+Epoch 49 (49/100):
+Train Instance Accuracy: 0.276886
+Epoch 50 (50/100):
+Train Instance Accuracy: 0.274478
+Epoch 51 (51/100):
+Train Instance Accuracy: 0.273676
+Epoch 52 (52/100):
+Train Instance Accuracy: 0.278090
+Epoch 53 (53/100):
+Train Instance Accuracy: 0.252408
+Epoch 54 (54/100):
+Train Instance Accuracy: 0.241573
+Epoch 55 (55/100):
+Train Instance Accuracy: 0.252006
+Epoch 56 (56/100):
+Train Instance Accuracy: 0.243579
+Epoch 57 (57/100):
+Train Instance Accuracy: 0.238363
+Epoch 58 (58/100):
+Train Instance Accuracy: 0.247191
+Epoch 59 (59/100):
+Train Instance Accuracy: 0.256822
+Epoch 60 (60/100):
+Train Instance Accuracy: 0.252408
+Epoch 61 (61/100):
+Train Instance Accuracy: 0.250000
+Epoch 62 (62/100):
+Train Instance Accuracy: 0.233547
+Epoch 63 (63/100):
+Train Instance Accuracy: 0.245185
+Epoch 64 (64/100):
+Train Instance Accuracy: 0.235152
+Epoch 65 (65/100):
+Train Instance Accuracy: 0.243981
+Epoch 66 (66/100):
+Train Instance Accuracy: 0.241573
+Epoch 67 (67/100):
+Train Instance Accuracy: 0.231541
+Epoch 68 (68/100):
+Train Instance Accuracy: 0.233146
+Epoch 69 (69/100):
+Train Instance Accuracy: 0.236356
+Epoch 70 (70/100):
+Train Instance Accuracy: 0.244382
+Epoch 71 (71/100):
+Train Instance Accuracy: 0.276886
+Epoch 72 (72/100):
+Train Instance Accuracy: 0.272873
+Epoch 73 (73/100):
+Train Instance Accuracy: 0.282103
+Epoch 74 (74/100):
+Train Instance Accuracy: 0.284109
+Epoch 75 (75/100):
+Train Instance Accuracy: 0.278491
+Epoch 76 (76/100):
+Train Instance Accuracy: 0.256019
+Epoch 77 (77/100):
+Train Instance Accuracy: 0.242376
+Epoch 78 (78/100):
+Train Instance Accuracy: 0.240770
+Epoch 79 (79/100):
+Train Instance Accuracy: 0.233547
+Epoch 80 (80/100):
+Train Instance Accuracy: 0.236758
+Epoch 81 (81/100):

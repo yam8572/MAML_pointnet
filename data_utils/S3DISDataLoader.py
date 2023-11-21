@@ -25,6 +25,7 @@ class S3DISDataset(Dataset):
 
         for room_name in tqdm(rooms_split, total=len(rooms_split)):
             room_path = os.path.join(data_root, room_name)
+            print("------------->", room_path)
             room_data = np.load(room_path)  # xyzrgbl, N*7
             points, labels = room_data[:, 0:6], room_data[:, 6]  # xyzrgb, N*6; l, N
             tmp, _ = np.histogram(labels, range(14))

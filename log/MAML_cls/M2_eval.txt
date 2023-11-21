@@ -1,0 +1,2 @@
+評估finetune完後 適應到新類別結果
+Test Instance Accuracy: 0.958333, Class Accuracy: 0.915751

@@ -18,26 +18,40 @@ class get_model(nn.Module):
         self.conv1 = nn.Conv1d(128, 128, 1)
         self.bn1 = nn.BatchNorm1d(128)
         self.drop1 = nn.Dropout(0.5)
+
+
         self.conv2 = nn.Conv1d(128, num_classes, 1)
 
     def forward(self, xyz):
         l0_points = xyz
-        l0_xyz = xyz[:,:3,:]
+        l0_xyz = xyz[:,:3,:] # PointNet++ 只有使用 XYZ 去訓練
 
         l1_xyz, l1_points = self.sa1(l0_xyz, l0_points)
+        # print(l1_xyz.size(), l1_points.size()) torch.Size([16, 3, 1024]) torch.Size([16, 96, 1024])
         l2_xyz, l2_points = self.sa2(l1_xyz, l1_points)
+        # print(l2_xyz.size(), l2_points.size()) torch.Size([16, 3, 256]) torch.Size([16, 256, 256])
         l3_xyz, l3_points = self.sa3(l2_xyz, l2_points)
+        # print(l3_xyz.size(), l3_points.size()) torch.Size([16, 3, 64]) torch.Size([16, 512, 64])
         l4_xyz, l4_points = self.sa4(l3_xyz, l3_points)
+        # print(l4_xyz.size(), l4_points.size()) torch.Size([16, 3, 16]) torch.Size([16, 1024, 16])
 
         l3_points = self.fp4(l3_xyz, l4_xyz, l3_points, l4_points)
+        # print(l3_points.size()) torch.Size([16, 256, 64])
         l2_points = self.fp3(l2_xyz, l3_xyz, l2_points, l3_points)
+        # print(l2_points.size()) torch.Size([16, 256, 256])
         l1_points = self.fp2(l1_xyz, l2_xyz, l1_points, l2_points)
+        # print(l1_points.size()) torch.Size([16, 128, 1024])
         l0_points = self.fp1(l0_xyz, l1_xyz, None, l1_points)
+        # print(l0_points.size()) torch.Size([16, 128, 1024])
 
         x = self.drop1(F.relu(self.bn1(self.conv1(l0_points))))
+        # print(x.size()) torch.Size([16, 128, 1024])
         x = self.conv2(x)
+        # print(x.size()) torch.Size([16, 13, 1024])
         x = F.log_softmax(x, dim=1)
+        # print(x.size()) torch.Size([16, 13, 1024])
         x = x.permute(0, 2, 1)
+        # print(x.size()) torch.Size([16, 1024, 13])
         return x, l4_points
 
 
